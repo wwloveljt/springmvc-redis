@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 加载资源配置 -->
+	<context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true" />
+
+	<!-- 自动扫描 -->
+	 <context:component-scan base-package="com.redis" /> 
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${jdbc.initialSize}"></property>
+		<!-- 连接池最大数量 -->
+		<property name="maxActive" value="${jdbc.maxActive}"></property>
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="${jdbc.maxIdle}"></property>
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${jdbc.minIdle}"></property>
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="${jdbc.maxWait}"></property>
+	</bean>
+
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<!-- 创建SqlSessionFactory -->
+	<bean id="sqlSessionFactory" name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+	</bean>
+
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.redis.dao" />
+		<property name="sqlSessionFactoryBeanName"	value="sqlSessionFactory"></property>
+	</bean>
+
+
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+	<!-- 引入配置文件：dbconfig.properties -->
+	<!-- <context:property-placeholder location="classpath:dbconfig.properties" 
+		/> -->
+
+	<!-- jedis连接池配置 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!-- 最大连接数 -->
+		<property name="maxTotal" value="${redis.maxTotal}" />
+		<!-- 最大空闲连接数 -->
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<!-- 每次释放连接的最大数目 -->
+		<property name="numTestsPerEvictionRun"
+			value="${redis.numTestsPerEvictionRun}" />
+		<!-- 释放连接的扫描间隔（毫秒） -->
+		<property name="timeBetweenEvictionRunsMillis"
+			value="${redis.timeBetweenEvictionRunsMillis}" />
+		<!-- 连接最小空闲时间 -->
+		<property name="minEvictableIdleTimeMillis"
+			value="${redis.minEvictableIdleTimeMillis}" />
+		<!-- 连接空闲多久后释放, 当空闲时间>该值 且 空闲连接>最大空闲连接数 时直接释放 -->
+		<property name="softMinEvictableIdleTimeMillis"
+			value="${redis.softMinEvictableIdleTimeMillis}" />
+		<!-- 获取连接时的最大等待毫秒数,小于零:阻塞不确定的时间,默认-1 -->
+		<property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+		<!-- 在获取连接的时候检查有效性, 默认false -->
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+		<!-- 在空闲时检查有效性, 默认false -->
+		<property name="testWhileIdle" value="${redis.testWhileIdle}" />
+		<!-- 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true -->
+		<property name="blockWhenExhausted"
+			value="${redis.blockWhenExhausted}" />
+	</bean>
+
+	<!-- jedis客户端单机版 -->
+	<bean id="redisClient" class="redis.clients.jedis.JedisPool">
+		<constructor-arg name="host" value="${redis.host}"></constructor-arg>
+		<constructor-arg name="port" value="${redis.port}"></constructor-arg>
+		<constructor-arg name="poolConfig" ref="jedisPoolConfig"></constructor-arg>
+	</bean>
+	
+	<!-- 引用工程中自己书写的redis常用接口实现类 -->
+	<bean id="_jedisClient" class="com.redis.impl.JedisClientSingle" /> 
+
+</beans>
