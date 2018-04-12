@@ -233,5 +233,6 @@
 
 	<modules>
 		<module>gecko-redis</module>
+		<module>gecho-activeMq</module>
 	</modules>
 </project>
