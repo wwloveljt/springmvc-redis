@@ -6,27 +6,13 @@
 		<artifactId>gecko</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>gecko-redis</artifactId>
-
-
-	<properties>
-		<!-- <spring.version>5.0.2.RELEASE</spring.version> -->
-	</properties>
+	<artifactId>gecko-zookeeper</artifactId>
 
 	<dependencies>
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<version>2.7.2</version>
-		</dependency>
-
 		<dependency>
 			<groupId>com.skin.finder</groupId>
 			<artifactId>gecho-config</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
 	</dependencies>
-
-
 </project>

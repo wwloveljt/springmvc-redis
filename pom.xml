@@ -20,7 +20,6 @@
 		<mybatis.version>3.2.6</mybatis.version>
 	</properties>
 
-
 	<dependencies>
 		<!-- spring 框架jar包 -->
 		<dependency>
@@ -234,5 +233,7 @@
 	<modules>
 		<module>gecko-redis</module>
 		<module>gecho-activeMq</module>
+		<module>gecho-config</module>
+		<module>gecko-zookeeper</module>
 	</modules>
 </project>
