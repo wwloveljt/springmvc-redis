@@ -23,7 +23,7 @@ public class TestRedis {
 	
 	@Test
 	public void test() {
-		_jedisClient.set("testKey", "我是redis测试的值");
+		_jedisClient.set("testKey", "123456");
 		System.out.println(_jedisClient.get("testKey"));
 		
 		_jedisClient.del("testKey");
