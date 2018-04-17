@@ -1,0 +1,7 @@
+com\redis\model\User.class
+com\redis\service\UserService.class
+com\redis\controller\UserController.class
+com\redis\JedisClient.class
+com\redis\service\imp\UserServiceImpl.class
+com\redis\dao\UserDao.class
+com\redis\impl\JedisClientSingle.class

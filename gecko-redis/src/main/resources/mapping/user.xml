@@ -4,15 +4,14 @@
 
     <sql id="field">
         id,
-        user_name as userName,
-        password as password,
+        username ,
         age as age
 
     </sql>
     <select id="selectUserById" resultType="User" >
             SELECT
                <include refid="field" />
-            FROM user_t
+            FROM user
             <where>
                 <if test="id!=null" >
                     id=#{id}

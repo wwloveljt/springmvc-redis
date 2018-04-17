@@ -8,11 +8,6 @@
 	</parent>
 	<artifactId>gecko-redis</artifactId>
 
-
-	<properties>
-		<!-- <spring.version>5.0.2.RELEASE</spring.version> -->
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>redis.clients</groupId>
